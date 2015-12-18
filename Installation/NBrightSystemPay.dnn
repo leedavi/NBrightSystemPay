@@ -1,6 +1,6 @@
 ﻿<dotnetnuke type="Package" version="5.0">
 	<packages>
-		<package name="NBrightSystemPay" type="Module" version="1.0.0">
+		<package name="NBrightSystemPay" type="Module" version="1.0.1">
 			<friendlyName>NBrightSystemPay</friendlyName>
 			<description>NBrightSystemPay: SystemPay (CyberPlus) Payment provider for NBrightStore</description>
 			<iconFile />
