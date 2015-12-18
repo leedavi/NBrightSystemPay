@@ -27,8 +27,8 @@ namespace Nevoweb.DNN.NBrightStore
 
                 var debugMode = info.GetXmlPropertyBool("genxml/checkbox/debugmode");
 
-                var orderid = Utils.RequestQueryStringParam(context, "vads_order_id");
-                string clientlang = Utils.RequestQueryStringParam(context, "vads_order_info");
+                var orderid = context.Request.Form.Get("vads_order_id");
+                string clientlang = context.Request.Form.Get("vads_order_info");
 
                 var rtnMsg = "SECURITY WARNING";
                 var sig1 = context.Request.Form.Get("signature");
@@ -62,18 +62,20 @@ namespace Nevoweb.DNN.NBrightStore
 
                     // ------------------------------------------------------------------------
                     rtnMsg = "";
-                    int NBrightSystemPayStoreOrderID = 0;
+                    int nBrightSystemPayStoreOrderId = 0;
 
-                    if (debugMode) debugMsg += "OrderId: " + NBrightSystemPayStoreOrderID + " </br>";
+                    if (Utils.IsNumeric(orderid)) nBrightSystemPayStoreOrderId = Convert.ToInt32(orderid);
 
-                    var orderData = new OrderData(NBrightSystemPayStoreOrderID);
+                    if (debugMode) debugMsg += "OrderId: " + nBrightSystemPayStoreOrderId + " vads_order_id: " + orderid + " </br>";
 
-                    string NBrightSystemPayStatusCode = ProviderUtils.GetStatusCode(orderData, context.Request);
+                    var orderData = new OrderData(nBrightSystemPayStoreOrderId);
 
-                    if (debugMode) debugMsg += "NBrightSystemPayStatusCode: " + NBrightSystemPayStatusCode + " </br>";
+                    string nBrightSystemPayStatusCode = ProviderUtils.GetStatusCode(orderData, context.Request);
+
+                    if (debugMode) debugMsg += "NBrightSystemPayStatusCode: " + nBrightSystemPayStatusCode + " </br>";
 
                     // Status return "00" is payment successful
-                    if (NBrightSystemPayStatusCode == "00")
+                    if (nBrightSystemPayStatusCode == "00")
                     {
                         //set order status to Payed
                         orderData.PaymentOk();
@@ -82,6 +84,8 @@ namespace Nevoweb.DNN.NBrightStore
                     {
                         orderData.PaymentFail();
                     }
+
+                    orderData.Save();
 
                     if (debugMode)
                     {
