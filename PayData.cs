@@ -43,7 +43,7 @@ namespace Nevoweb.DNN.NBrightStore
             vads_site_id = settings.GetXmlProperty("genxml/textbox/vads_site_id");
             vads_ctx_mode = "PRODUCTION";
             if (settings.GetXmlPropertyBool("genxml/checkbox/testmode")) vads_ctx_mode = "TEST";
-            vads_trans_date = DateTime.Now.Year.ToString("0000") + DateTime.Now.Month.ToString("00") + DateTime.Now.Day.ToString("00") + DateTime.Now.Hour.ToString("00") + DateTime.Now.Minute.ToString("00") + DateTime.Now.Second.ToString("00");
+            vads_trans_date = DateTime.UtcNow.Year.ToString("0000") + DateTime.UtcNow.Month.ToString("00") + DateTime.UtcNow.Day.ToString("00") + DateTime.UtcNow.Hour.ToString("00") + DateTime.UtcNow.Minute.ToString("00") + DateTime.UtcNow.Second.ToString("00");
             vads_amount = orderTotal.Replace(",", "").Replace(".", "");
             vads_currency = settings.GetXmlProperty("genxml/textbox/vads_currency");
             vads_return_mode = "POST";

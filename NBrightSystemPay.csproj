@@ -91,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Installation\NBrightSystemPay.dnn" />
-    <None Include="Installation\NBrightSystemPay_1.0.1_Install.zip" />
+    <None Include="Installation\NBrightSystemPay_1.0.2_Install.zip" />
     <None Include="notify.ashx" />
   </ItemGroup>
   <ItemGroup>
