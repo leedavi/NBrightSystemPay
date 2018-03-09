@@ -1,3 +1,3 @@
-<%@ Control language="C#" Inherits="Nevoweb.DNN.NBrightStore.NBrightSystemPayPayment" AutoEventWireup="true"  Codebehind="NBrightSystemPayPayment.ascx.cs" %>
-<asp:Repeater ID="rpDataH" runat="server" OnItemCommand="CtrlItemCommand" ></asp:Repeater>
+<%@ Control language="C#" Inherits="NBrightSystemPay.Payment" AutoEventWireup="true"  Codebehind="NBrightSystemPayPayment.ascx.cs" %>
+<asp:PlaceHolder ID="phData" runat="server"></asp:PlaceHolder>
 

@@ -47,6 +47,9 @@
     <Reference Include="NBrightDNN">
       <HintPath>..\..\..\bin\NBrightDNN.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\..\..\bin\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -57,7 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PayData.cs" />
+    <Compile Include="Components\AjaxProvider.cs" />
+    <Compile Include="Components\PayData.cs" />
     <Compile Include="Payment.ascx.cs">
       <DependentUpon>Payment.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -65,13 +69,13 @@
     <Compile Include="Payment.ascx.designer.cs">
       <DependentUpon>Payment.ascx.cs</DependentUpon>
     </Compile>
-    <Compile Include="PaymentProvider.cs" />
+    <Compile Include="Components\PaymentProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProviderUtils.cs" />
+    <Compile Include="Components\ProviderUtils.cs" />
     <Compile Include="notify.ashx.cs">
       <DependentUpon>notify.ashx</DependentUpon>
     </Compile>
-    <Compile Include="RemotePost.cs" />
+    <Compile Include="Components\RemotePost.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Payment.ascx">
@@ -80,12 +84,11 @@
     <Content Include="pluginSystemPay.xml">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Themes\config\default\methodselection.html" />
-    <Content Include="Themes\config\default\settings.html" />
+    <None Include="Themes\config\default\methodselection.cshtml" />
     <Content Include="Themes\config\img\cyberplus.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="App_LocalResources\Payment.ascx.resx">
+    <EmbeddedResource Include="App_LocalResources\syspayPayment.ascx.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
@@ -93,8 +96,11 @@
     <None Include="Installation\NBrightSystemPay.dnn" />
     <None Include="Installation\NBrightSystemPay_1.0.2_Install.zip" />
     <None Include="notify.ashx" />
+    <None Include="Themes\config\default\settings.cshtml" />
+    <None Include="Themes\config\default\settingsfields.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Themes\config\js\" />
     <Folder Include="Themes\config\resx\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,12 +3,12 @@ using System.Web;
 using NBrightCore.common;
 using Nevoweb.DNN.NBrightBuy.Components;
 
-namespace Nevoweb.DNN.NBrightStore
+namespace NBrightSystemPay
 {
     /// <summary>
     /// Summary description for XMLconnector
     /// </summary>
-    public class NBrightSystemPayNotify : IHttpHandler
+    public class Notify : IHttpHandler
     {
         private String _lang = "";
 
