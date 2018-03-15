@@ -26,17 +26,21 @@ namespace NBrightSystemPay
 
         public override string ProcessCommand(string paramCmd, HttpContext context, string editlang = "")
         {
-            var ajaxInfo = NBrightBuyUtils.GetAjaxFields(context);
+            if (!NBrightBuyUtils.CheckRights())
+            {
+                return "Security Error.";
+            }
+                var ajaxInfo = NBrightBuyUtils.GetAjaxFields(context);
             var lang = NBrightBuyUtils.SetContextLangauge(ajaxInfo); // Ajax breaks context with DNN, so reset the context language to match the client.
             var objCtrl = new NBrightBuyController();
 
-            var strOut = "PayBox Ajax Error";
+            var strOut = "SystemPay Ajax Error";
             switch (paramCmd)
             {
-                case "nbrightpayboxajax_savesettings":
+                case "nbrightsystempay_savesettings":
                     strOut = objCtrl.SavePluginSinglePageData(context);
                     break;
-                case "nbrightpayboxajax_selectlang":
+                case "nbrightsystempay_selectlang":
                     objCtrl.SavePluginSinglePageData(context);
                     var nextlang = ajaxInfo.GetXmlProperty("genxml/hidden/nextlang");
                     var info = objCtrl.GetPluginSinglePageData("NBrightSystemPaypayment", "NBrightSystemPayPAYMENT", nextlang);

@@ -24,7 +24,7 @@ namespace NBrightSystemPay
 
         public void LoadSettings(OrderData oInfo)
         {
-            var settings = ProviderUtils.GetProviderSettings("NBrightSystemPaypayment");
+            var settings = ProviderUtils.GetProviderSettings();
             var appliedtotal = oInfo.PurchaseInfo.GetXmlPropertyDouble("genxml/appliedtotal");
             var alreadypaid = oInfo.PurchaseInfo.GetXmlPropertyDouble("genxml/alreadypaid");
 
@@ -40,12 +40,12 @@ namespace NBrightSystemPay
             vads_page_action = "PAYMENT";
             vads_action_mode = "INTERACTIVE";
             vads_payment_config = "SINGLE";
-            vads_site_id = settings.GetXmlProperty("genxml/textbox/vads_site_id");
+            vads_site_id = settings.GetXmlProperty("genxml/textbox/site");
             vads_ctx_mode = "PRODUCTION";
             if (settings.GetXmlPropertyBool("genxml/checkbox/testmode")) vads_ctx_mode = "TEST";
             vads_trans_date = DateTime.UtcNow.Year.ToString("0000") + DateTime.UtcNow.Month.ToString("00") + DateTime.UtcNow.Day.ToString("00") + DateTime.UtcNow.Hour.ToString("00") + DateTime.UtcNow.Minute.ToString("00") + DateTime.UtcNow.Second.ToString("00");
             vads_amount = orderTotal.Replace(",", "").Replace(".", "");
-            vads_currency = settings.GetXmlProperty("genxml/textbox/vads_currency");
+            vads_currency = settings.GetXmlProperty("genxml/textbox/currency");
             vads_return_mode = "POST";
             vads_order_id = oInfo.PurchaseInfo.ItemID.ToString("");
             vads_order_info = oInfo.Lang;

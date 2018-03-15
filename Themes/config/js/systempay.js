@@ -2,11 +2,13 @@
 
 $(document).ready(function () {
 
-    $('#paybox_cmdSave').unbind("click");
-    $('#paybox_cmdSave').click(function () {
+    //NOTE: Ajax command MUST start with the Ajax provider key.  (Plugin Ref)
+
+    $('#syspay_cmdSave').unbind("click");
+    $('#syspay_cmdSave').click(function () {
         $('.processing').show();
         $('.actionbuttonwrapper').hide();
-        nbxget('nbrightpayboxajax_savesettings', '.payboxdata', '.payboxreturnmsg');
+        nbxget('nbrightsystempay_savesettings', '.syspaydata', '.syspayreturnmsg');
     });
 
     $('.selectlang').unbind("click");
@@ -15,20 +17,20 @@ $(document).ready(function () {
         $('.actionbuttonwrapper').hide();
         $('.processing').show();
         $("#nextlang").val($(this).attr("editlang"));
-        nbxget('nbrightpayboxajax_selectlang', '.payboxdata', '.payboxdata');
+        nbxget('nbrightsystempay_selectlang', '.syspaydata', '.syspaydata');
     });
 
 
-    $(document).on("nbxgetcompleted", NBS_PayBox_nbxgetCompleted); // assign a completed event for the ajax calls
+    $(document).on("nbxgetcompleted", NBS_SysPay_nbxgetCompleted); // assign a completed event for the ajax calls
 
     // function to do actions after an ajax call has been made.
-    function NBS_PayBox_nbxgetCompleted(e) {
+    function NBS_SysPay_nbxgetCompleted(e) {
 
         $('.processing').hide();
         $('.actionbuttonwrapper').show();
         $('.editlanguage').show();
 
-        if (e.cmd == 'nbrightpayboxajax_selectlang') {
+        if (e.cmd == 'nbrightsyspayajax_selectlang') {
                         
         }
 

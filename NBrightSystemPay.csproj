@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -81,9 +81,11 @@
     <Content Include="Payment.ascx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
-    <Content Include="pluginSystemPay.xml">
+    <Content Include="Installation\pluginSystemPay.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Themes\config\js\systempay.js" />
+    <None Include="README.md" />
     <None Include="Themes\config\default\methodselection.cshtml" />
     <Content Include="Themes\config\img\cyberplus.png" />
   </ItemGroup>
@@ -96,20 +98,30 @@
     <None Include="Installation\NBrightSystemPay.dnn" />
     <None Include="Installation\NBrightSystemPay_1.0.2_Install.zip" />
     <None Include="notify.ashx" />
+    <None Include="Themes\config\default\payment_fail.cshtml" />
+    <None Include="Themes\config\default\payment_ok.cshtml" />
     <None Include="Themes\config\default\settings.cshtml" />
     <None Include="Themes\config\default\settingsfields.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Themes\config\js\" />
     <Folder Include="Themes\config\resx\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetFileName)" "..\..\..\..\..\bin\$(TargetFileName)"
-
-copy "$(AssemblyName).pdb" "..\..\..\..\..\bin\$(AssemblyName).pdb"
-</PostBuildEvent>
+    <Extension>zip</Extension>
+    <DNNFileName>NBrightSystemPay</DNNFileName>
+    <PackageName>NBrightSystemPay</PackageName>
   </PropertyGroup>
+  <Import Project="BuildScripts\ModulePackage.Targets" />
+  <Target Name="AfterBuild" DependsOnTargets="PackageAndDeploy">
+  </Target>
+  <Import Project="packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

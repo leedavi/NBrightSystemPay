@@ -20,7 +20,7 @@ namespace NBrightSystemPay
         public void ProcessRequest(HttpContext context)
         {
             var modCtrl = new NBrightBuyController();
-            var info = ProviderUtils.GetProviderSettings("NBrightSystemPaypayment");
+            var info = ProviderUtils.GetProviderSettings();
 
             try
             {

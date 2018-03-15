@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.UI.WebControls;
+using System.Xml.Schema;
 using DotNetNuke.Common;
 using DotNetNuke.Entities.Portals;
+using DotNetNuke.Entities.Users;
 using NBrightCore.common;
 using NBrightDNN;
 using Nevoweb.DNN.NBrightBuy.Components;
@@ -20,9 +22,15 @@ namespace NBrightSystemPay
 
         public override string GetTemplate(NBrightInfo cartInfo)
         {
-            var info = ProviderUtils.GetProviderSettings("NBrightSystemPaypayment");
-            var templ = ProviderUtils.GetTemplateData(info.GetXmlProperty("genxml/textbox/checkouttemplate"), info);
+            if (cartInfo.GetXmlPropertyDouble("genxml/appliedtotal") <= 0)
+            {
+                return "";
+            }
 
+            var info = ProviderUtils.GetProviderSettings();
+            var templateName = info.GetXmlProperty("genxml/textbox/checkouttemplate");
+            var passSettings = NBrightBuyUtils.GetPassSettings(info);
+            var templ = NBrightBuyUtils.RazorTemplRender(templateName, 0, "", info, "/DesktopModules/NBright/NBrightSystemPay", "config", Utils.GetCurrentCulture(), passSettings);
             return templ;
         }
 
@@ -63,27 +71,70 @@ namespace NBrightSystemPay
         {
             // vads fields are always passed back on return
             var orderid = context.Request.Form.Get("vads_order_id");
+            if (!Utils.IsNumeric(orderid))
+            {
+                orderid = Utils.RequestParam(context, "orderid");
+            }
             string clientlang = context.Request.Form.Get("vads_order_info");
             if (Utils.IsNumeric(orderid))
             {
                 var status = context.Request.Form.Get("vads_result");
-                if (status != "00")
+                if (string.IsNullOrEmpty(status))
                 {
-                    var orderData = new OrderData(Convert.ToInt32(orderid));
+                    status = Utils.RequestQueryStringParam(context, "status");
+                }
+
+                var orderData = new OrderData(Convert.ToInt32(orderid));
+                if ((status != "00" || status == "0") && orderData.IsNotPaid())
+                {
                     var rtnerr = orderData.PurchaseInfo.GetXmlProperty("genxml/paymenterror");
                     if (rtnerr == "") rtnerr = "fail"; // to return this so a fail is activated.
 
-                    // check we have a waiting for bank status (IPN may have altered status already)
+                    orderData.AddAuditMessage(rtnerr, "paymsg", "payment.ascx", "False");
+                    orderData.Save();
+                    // check we have a waiting for bank status (IPN may have altered status already + help stop hack)
                     if (orderData.OrderStatus == "020")
                     {
                         orderData.PaymentFail(); // paymentfailed will move order back to cart.
                     }
-                    return rtnerr;
+                    return GetReturnTemplate(orderData, false, rtnerr);
                 }
+
+                // check we have a waiting for bank status (IPN may have altered status already + help stop hack)
+                if (orderData.OrderStatus == "020")
+                {
+                    orderData.PaymentOk("050"); // order paid, but NOT verified
+                }
+                return GetReturnTemplate(orderData, true, "");
             }
-            return "";
+            return "" ;
         }
 
+
+        private string GetReturnTemplate(OrderData orderData, bool paymentok, string paymenterror)
+        {
+            var info = ProviderUtils.GetProviderSettings();
+            info.UserId = UserController.Instance.GetCurrentUserInfo().UserID;
+            var templ = "";
+            var passSettings = NBrightBuyUtils.GetPassSettings(info);
+            if (passSettings.ContainsKey("paymenterror"))
+            {
+                passSettings.Add("paymenterror", paymenterror);
+            }
+            var displaytemplate = "payment_ok.cshtml";
+            if (paymentok)
+            {
+                info.SetXmlProperty("genxml/ordernumber", orderData.OrderNumber);
+                templ = NBrightBuyUtils.RazorTemplRender(displaytemplate, 0, "", info, "/DesktopModules/NBright/NBrightSystemPay", "config", Utils.GetCurrentCulture(), passSettings);
+            }
+            else
+            {
+                displaytemplate = "payment_fail.cshtml";
+                templ = NBrightBuyUtils.RazorTemplRender(displaytemplate, 0, "", info, "/DesktopModules/NBright/NBrightSystemPay", "config", Utils.GetCurrentCulture(), passSettings);
+            }
+
+            return templ;
+        }
 
 
 

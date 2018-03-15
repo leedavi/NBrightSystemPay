@@ -14,7 +14,7 @@
 var info = (NBrightInfo)Model.List.First();
 }
 
-<script type="text/javascript" src="/DesktopModules/NBright/NBrightPayBox/Themes/config/js/systempay.js"></script>
+<script type="text/javascript" src="/DesktopModules/NBright/NBrightSystemPay/Themes/config/js/systempay.js"></script>
 
 <br />
 
@@ -25,7 +25,7 @@ var info = (NBrightInfo)Model.List.First();
                 <i class="fa fa-bars"></i>
             </a>
             <div class="actionbuttonwrapper">
-                <a id="paybox_cmdSave" class="btn btn-primary" href="javascript:void(0);">@ResourceKey("General.cmdSaveButton")</a>
+                <a id="syspay_cmdSave" class="btn btn-primary" href="javascript:void(0);">@ResourceKey("General.cmdSaveButton")</a>
             </div>
         </div>
         <div class="col-xs-3 col-sm-3 top-panel-right">
@@ -35,7 +35,7 @@ var info = (NBrightInfo)Model.List.First();
 
 <div class="row">
 
-    <div class="payboxreturnmsg">
+    <div class="syspayreturnmsg">
     </div>
 
     <div class="col-xs-12 col-sm-12">
@@ -45,7 +45,7 @@ var info = (NBrightInfo)Model.List.First();
                     <i class="fa fa-search"></i><span>NBrightSystemPay Payment</span>
                 </div>
             </div>
-            <div class="box-content systempaydata">
+            <div class="box-content syspaydata">
 
                 @RenderTemplate("\\DesktopModules\\NBright\\NBrightSystemPay\\Themes\\config\\Default\\settingsfields.cshtml", Model)
 

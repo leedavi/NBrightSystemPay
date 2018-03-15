@@ -27,27 +27,10 @@ namespace NBrightSystemPay
             return templ;
         }
 
-        public static NBrightInfo GetProviderSettings(String ctrlkey)
+        public static NBrightInfo GetProviderSettings()
         {
-            var info = (NBrightInfo)Utils.GetCache("NBrightSystemPayPaymentProvider" + PortalSettings.Current.PortalId.ToString(""));
-            if (info == null)
-            {
-                var modCtrl = new NBrightBuyController();
-
-                info = modCtrl.GetByGuidKey(PortalSettings.Current.PortalId, -1, "NBrightSystemPayPAYMENT", ctrlkey);
-
-                if (info == null)
-                {
-                    info = new NBrightInfo(true);
-                    info.GUIDKey = ctrlkey;
-                    info.TypeCode = "NBrightSystemPayPAYMENT";
-                    info.ModuleId = -1;
-                    info.PortalId = PortalSettings.Current.PortalId;
-                }
-
-                Utils.SetCache("NBrightSystemPayPaymentProvider" + PortalSettings.Current.PortalId.ToString(""), info);
-            }
-
+            var objCtrl = new NBrightBuyController();
+            var info = objCtrl.GetPluginSinglePageData("NBrightSystemPaypayment", "NBrightSystemPayPAYMENT", Utils.GetCurrentCulture());
             return info;
         }
 
@@ -55,7 +38,7 @@ namespace NBrightSystemPay
         {
             var rPost = new RemotePost();
 
-            var settings = ProviderUtils.GetProviderSettings("NBrightSystemPaypayment");
+            var settings = ProviderUtils.GetProviderSettings();
 
             var payData = new PayData(orderData);
 
